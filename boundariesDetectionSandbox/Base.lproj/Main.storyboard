@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6211" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6204"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
-                <viewController id="vXZ-lx-hvc" customClass="ViewController" customModuleProvider="" sceneMemberID="viewController">
+                <viewController id="vXZ-lx-hvc" customClass="ViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
@@ -15,8 +16,150 @@
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="9R9-DS-oEW">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="446" id="gI0-mL-UFC"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="gI0-mL-UFC"/>
+                                    </mask>
+                                </variation>
+                                <variation key="widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="gI0-mL-UFC"/>
+                                    </mask>
+                                </variation>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IGh-Ij-FDO">
+                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <state key="normal" title="Load Greyscale">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="loadGrayscale:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="Bc0-TA-pvg"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8u7-fz-dvz">
+                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <state key="normal" title="Threshold Step">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="thresholdResultsStep:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="a1X-Q1-OiM"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bXW-fB-Pff">
+                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <state key="normal" title="Rect Bands Step">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="rectBandsResultsStep:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="x8W-Bh-T61"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kCW-rC-IRV">
+                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <state key="normal" title="Final Boundaries Step">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="finalBoundariesResultsStep:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="QAs-sh-9av"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7S2-qv-Rcq">
+                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <state key="normal" title="Revert Original">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="restoreBackOriginal:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="NBh-w2-LPo"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="bXW-fB-Pff" firstAttribute="centerX" secondItem="7S2-qv-Rcq" secondAttribute="centerX" constant="0.5" id="FIe-Qs-NyB"/>
+                            <constraint firstItem="IGh-Ij-FDO" firstAttribute="top" secondItem="9R9-DS-oEW" secondAttribute="bottom" constant="8" id="Fri-Fq-MvZ"/>
+                            <constraint firstItem="9R9-DS-oEW" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" id="JsS-fk-loB"/>
+                            <constraint firstItem="bXW-fB-Pff" firstAttribute="top" secondItem="7S2-qv-Rcq" secondAttribute="bottom" constant="8" id="KIc-bY-Ckx"/>
+                            <constraint firstItem="kCW-rC-IRV" firstAttribute="top" secondItem="bXW-fB-Pff" secondAttribute="bottom" constant="8" id="MZ2-Lg-0Sv"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="9R9-DS-oEW" secondAttribute="trailing" constant="-16" id="O1d-Gd-Otu"/>
+                            <constraint firstAttribute="centerX" secondItem="kCW-rC-IRV" secondAttribute="centerX" constant="-0.5" id="Puo-jI-eUH"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="kCW-rC-IRV" secondAttribute="bottom" constant="20" id="X66-jK-hCp"/>
+                            <constraint firstItem="kCW-rC-IRV" firstAttribute="top" secondItem="8u7-fz-dvz" secondAttribute="bottom" constant="8" id="bNG-AD-Ss4"/>
+                            <constraint firstItem="9R9-DS-oEW" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="c98-le-V3f"/>
+                            <constraint firstItem="7S2-qv-Rcq" firstAttribute="top" secondItem="9R9-DS-oEW" secondAttribute="bottom" constant="8" id="dfv-41-7ec"/>
+                            <constraint firstItem="8u7-fz-dvz" firstAttribute="centerX" secondItem="IGh-Ij-FDO" secondAttribute="centerX" id="gdb-Rw-aP1"/>
+                            <constraint firstAttribute="centerX" secondItem="bXW-fB-Pff" secondAttribute="centerX" constant="-109.5" id="h99-wa-hLs"/>
+                            <constraint firstAttribute="centerX" secondItem="8u7-fz-dvz" secondAttribute="centerX" constant="111.5" id="hXS-cG-YoQ"/>
+                            <constraint firstItem="8u7-fz-dvz" firstAttribute="top" secondItem="IGh-Ij-FDO" secondAttribute="bottom" constant="8" id="uBd-od-bmI"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="9R9-DS-oEW"/>
+                                <exclude reference="IGh-Ij-FDO"/>
+                                <exclude reference="8u7-fz-dvz"/>
+                                <exclude reference="bXW-fB-Pff"/>
+                                <exclude reference="kCW-rC-IRV"/>
+                                <exclude reference="7S2-qv-Rcq"/>
+                            </mask>
+                            <mask key="constraints">
+                                <exclude reference="JsS-fk-loB"/>
+                                <exclude reference="O1d-Gd-Otu"/>
+                                <exclude reference="c98-le-V3f"/>
+                                <exclude reference="Fri-Fq-MvZ"/>
+                                <exclude reference="gdb-Rw-aP1"/>
+                                <exclude reference="hXS-cG-YoQ"/>
+                                <exclude reference="uBd-od-bmI"/>
+                                <exclude reference="dfv-41-7ec"/>
+                                <exclude reference="MZ2-Lg-0Sv"/>
+                                <exclude reference="Puo-jI-eUH"/>
+                                <exclude reference="bNG-AD-Ss4"/>
+                                <exclude reference="FIe-Qs-NyB"/>
+                                <exclude reference="KIc-bY-Ckx"/>
+                                <exclude reference="h99-wa-hLs"/>
+                                <exclude reference="X66-jK-hCp"/>
+                            </mask>
+                        </variation>
+                        <variation key="widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="9R9-DS-oEW"/>
+                                <include reference="IGh-Ij-FDO"/>
+                                <include reference="8u7-fz-dvz"/>
+                                <include reference="bXW-fB-Pff"/>
+                                <include reference="kCW-rC-IRV"/>
+                                <include reference="7S2-qv-Rcq"/>
+                            </mask>
+                            <mask key="constraints">
+                                <include reference="JsS-fk-loB"/>
+                                <include reference="O1d-Gd-Otu"/>
+                                <include reference="c98-le-V3f"/>
+                                <include reference="Fri-Fq-MvZ"/>
+                                <include reference="gdb-Rw-aP1"/>
+                                <include reference="hXS-cG-YoQ"/>
+                                <include reference="uBd-od-bmI"/>
+                                <include reference="dfv-41-7ec"/>
+                                <include reference="MZ2-Lg-0Sv"/>
+                                <include reference="Puo-jI-eUH"/>
+                                <include reference="bNG-AD-Ss4"/>
+                                <include reference="FIe-Qs-NyB"/>
+                                <include reference="KIc-bY-Ckx"/>
+                                <include reference="h99-wa-hLs"/>
+                                <include reference="X66-jK-hCp"/>
+                            </mask>
+                        </variation>
                     </view>
+                    <connections>
+                        <outlet property="buttonFinalBoundariesStep" destination="kCW-rC-IRV" id="WlA-Ro-QI2"/>
+                        <outlet property="buttonLoadGrayImage" destination="IGh-Ij-FDO" id="YfA-gu-Xuk"/>
+                        <outlet property="buttonRectBandsStep" destination="bXW-fB-Pff" id="vPy-5y-LF7"/>
+                        <outlet property="buttonRestoreOriginal" destination="7S2-qv-Rcq" id="TGp-mn-T7Q"/>
+                        <outlet property="buttonThresholdStep" destination="8u7-fz-dvz" id="VBJ-BF-1Xd"/>
+                        <outlet property="displayImageWindow" destination="9R9-DS-oEW" id="eKw-bA-XCU"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>

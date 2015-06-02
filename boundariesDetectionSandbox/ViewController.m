@@ -2,7 +2,7 @@
 //  ViewController.m
 //  boundariesDetectionSandbox
 //
-//  Created by Andrew Paterson on 6/1/15.
+//  Created by Alex on 6/1/15.
 //  Copyright (c) 2015 asb. All rights reserved.
 //
 
@@ -18,6 +18,32 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
 }
+
+
+- (IBAction)loadGrayscale:(id)sender {
+    
+}
+
+
+- (IBAction)restoreBackOriginal:(id)sender {
+    
+}
+
+
+- (IBAction)thresholdResultsStep:(id)sender {
+    
+}
+
+
+- (IBAction)rectBandsResultsStep:(id)sender {
+    
+}
+
+
+- (IBAction)finalBoundariesResultsStep:(id)sender {
+    
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
