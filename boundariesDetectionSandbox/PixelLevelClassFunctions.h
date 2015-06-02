@@ -30,4 +30,6 @@ typedef NS_ENUM(NSInteger, ImageChannel) {
 +(NSArray *) boundariesForImageAnalysisFromRectangleDetection: (UIImage *)sourceCompositeImage;
 +(NSArray *) boundariesForImageAnalysisForChannel: (ImageChannel)channel FromRectangleDetectionOf: (UIImage *)sourceCompositeImage;
 
+
+
 @end

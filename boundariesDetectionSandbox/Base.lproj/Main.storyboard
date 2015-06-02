@@ -75,6 +75,9 @@
                                 <state key="normal" title="Revert Original">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <variation key="widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="259" y="474" width="102" height="30"/>
+                                </variation>
                                 <connections>
                                     <action selector="restoreBackOriginal:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="NBh-w2-LPo"/>
                                 </connections>
