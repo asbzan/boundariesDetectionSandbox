@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -107,21 +108,21 @@
                                 <exclude reference="7S2-qv-Rcq"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="JsS-fk-loB"/>
-                                <exclude reference="O1d-Gd-Otu"/>
-                                <exclude reference="c98-le-V3f"/>
-                                <exclude reference="Fri-Fq-MvZ"/>
+                                <exclude reference="X66-jK-hCp"/>
+                                <exclude reference="dfv-41-7ec"/>
                                 <exclude reference="gdb-Rw-aP1"/>
                                 <exclude reference="hXS-cG-YoQ"/>
                                 <exclude reference="uBd-od-bmI"/>
-                                <exclude reference="dfv-41-7ec"/>
-                                <exclude reference="MZ2-Lg-0Sv"/>
-                                <exclude reference="Puo-jI-eUH"/>
-                                <exclude reference="bNG-AD-Ss4"/>
+                                <exclude reference="Fri-Fq-MvZ"/>
                                 <exclude reference="FIe-Qs-NyB"/>
                                 <exclude reference="KIc-bY-Ckx"/>
                                 <exclude reference="h99-wa-hLs"/>
-                                <exclude reference="X66-jK-hCp"/>
+                                <exclude reference="MZ2-Lg-0Sv"/>
+                                <exclude reference="Puo-jI-eUH"/>
+                                <exclude reference="bNG-AD-Ss4"/>
+                                <exclude reference="JsS-fk-loB"/>
+                                <exclude reference="O1d-Gd-Otu"/>
+                                <exclude reference="c98-le-V3f"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
@@ -134,21 +135,21 @@
                                 <include reference="7S2-qv-Rcq"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="JsS-fk-loB"/>
-                                <include reference="O1d-Gd-Otu"/>
-                                <include reference="c98-le-V3f"/>
-                                <include reference="Fri-Fq-MvZ"/>
+                                <include reference="X66-jK-hCp"/>
+                                <include reference="dfv-41-7ec"/>
                                 <include reference="gdb-Rw-aP1"/>
                                 <include reference="hXS-cG-YoQ"/>
                                 <include reference="uBd-od-bmI"/>
-                                <include reference="dfv-41-7ec"/>
-                                <include reference="MZ2-Lg-0Sv"/>
-                                <include reference="Puo-jI-eUH"/>
-                                <include reference="bNG-AD-Ss4"/>
+                                <include reference="Fri-Fq-MvZ"/>
                                 <include reference="FIe-Qs-NyB"/>
                                 <include reference="KIc-bY-Ckx"/>
                                 <include reference="h99-wa-hLs"/>
-                                <include reference="X66-jK-hCp"/>
+                                <include reference="MZ2-Lg-0Sv"/>
+                                <include reference="Puo-jI-eUH"/>
+                                <include reference="bNG-AD-Ss4"/>
+                                <include reference="JsS-fk-loB"/>
+                                <include reference="O1d-Gd-Otu"/>
+                                <include reference="c98-le-V3f"/>
                             </mask>
                         </variation>
                     </view>

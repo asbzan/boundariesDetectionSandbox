@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4928A6A91B1E36450092404A /* PixelCompositeImageGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4928A6A81B1E36450092404A /* PixelCompositeImageGenerator.m */; };
 		49567CFE1B1D010A009BD6AE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 49567CFD1B1D010A009BD6AE /* main.m */; };
 		49567D011B1D010A009BD6AE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 49567D001B1D010A009BD6AE /* AppDelegate.m */; };
 		49567D041B1D010B009BD6AE /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49567D031B1D010B009BD6AE /* ViewController.m */; };
@@ -29,6 +30,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4928A6A71B1E36450092404A /* PixelCompositeImageGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PixelCompositeImageGenerator.h; sourceTree = "<group>"; };
+		4928A6A81B1E36450092404A /* PixelCompositeImageGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PixelCompositeImageGenerator.m; sourceTree = "<group>"; };
 		49567CF81B1D010A009BD6AE /* boundariesDetectionSandbox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = boundariesDetectionSandbox.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49567CFC1B1D010A009BD6AE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		49567CFD1B1D010A009BD6AE /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -96,6 +99,8 @@
 				49567D221B1D2599009BD6AE /* PixelLevelClassFunctions.m */,
 				49567D241B1D25E6009BD6AE /* HelperMathClassFunctions.h */,
 				49567D251B1D25E6009BD6AE /* HelperMathClassFunctions.m */,
+				4928A6A71B1E36450092404A /* PixelCompositeImageGenerator.h */,
+				4928A6A81B1E36450092404A /* PixelCompositeImageGenerator.m */,
 				49567D081B1D010B009BD6AE /* Images.xcassets */,
 				49567D0A1B1D010B009BD6AE /* LaunchScreen.xib */,
 				49567CFB1B1D010A009BD6AE /* Supporting Files */,
@@ -233,6 +238,7 @@
 				49567D011B1D010A009BD6AE /* AppDelegate.m in Sources */,
 				49567D261B1D25E6009BD6AE /* HelperMathClassFunctions.m in Sources */,
 				49567D231B1D2599009BD6AE /* PixelLevelClassFunctions.m in Sources */,
+				4928A6A91B1E36450092404A /* PixelCompositeImageGenerator.m in Sources */,
 				49567CFE1B1D010A009BD6AE /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -428,6 +434,7 @@
 				49567D1D1B1D010B009BD6AE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		49567D1E1B1D010B009BD6AE /* Build configuration list for PBXNativeTarget "boundariesDetectionSandboxTests" */ = {
 			isa = XCConfigurationList;
@@ -436,6 +443,7 @@
 				49567D201B1D010B009BD6AE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
