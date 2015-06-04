@@ -8,10 +8,14 @@
 
 #import "ViewController.h"
 #import <MobileCoreServices/UTCoreTypes.h>
+#import "PixelLevelClassFunctions.h"
 
 @interface ViewController ()
 
 @property (nonatomic) UIImagePickerController *photosImagePickerController;
+
+@property UIImage *originalGrayscaleLoaded;
+@property NSArray *imageThresholdChannelData;
 
 @end
 
@@ -34,6 +38,11 @@
 
 - (IBAction)loadGrayscale:(id)sender {
  
+    self.buttonRestoreOriginal.enabled = NO;
+    self.buttonThresholdStep.enabled = NO;
+    self.buttonRectBandsStep.enabled = NO;
+    self.buttonFinalBoundariesStep.enabled = NO;
+    
     self.photosImagePickerController.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
     [self presentViewController:self.photosImagePickerController animated:YES completion:nil];
 }
@@ -41,16 +50,34 @@
 
 - (IBAction)restoreBackOriginal:(id)sender {
     
+    self.displayImageWindow.image = self.originalGrayscaleLoaded;
+    self.buttonRectBandsStep.enabled = NO;
+    self.buttonFinalBoundariesStep.enabled = NO;
+    
 }
 
 
 - (IBAction)thresholdResultsStep:(id)sender {
+    double thresholdCalculated = [PixelLevelClassFunctions calculateThresholdPixelValueForChannel:Green FromImage:self.displayImageWindow.image];
+    self.LabelBaselineThresholdValue.text = [NSString stringWithFormat:@"%.1f", thresholdCalculated];
+    
+    NSArray *thresholdImageChannelData = [PixelLevelClassFunctions singleChannel:Green FilteredPixelsArrayOf:self.displayImageWindow.image BelowThreshold:thresholdCalculated];
+    self.imageThresholdChannelData = thresholdImageChannelData;
+    
+    // would ever the CGWidth be different from the UIWidth?
+    NSUInteger imageWidth = self.displayImageWindow.image.size.width;
+    NSUInteger imageHeight = self.displayImageWindow.image.size.height;
+    
+    UIImage *thresholdImage = [PixelLevelClassFunctions convertToImageFromArray:thresholdImageChannelData AndOriginalImageWidth:imageWidth AndImageHeight:imageHeight];
+    self.displayImageWindow.image = thresholdImage;
+    self.buttonRectBandsStep.enabled = YES;
     
 }
 
 
 - (IBAction)rectBandsResultsStep:(id)sender {
-    
+ 
+    self.buttonFinalBoundariesStep.enabled = YES;
 }
 
 
@@ -71,11 +98,11 @@
     if ([mediaType isEqualToString:(NSString *)kUTTypeImage]) {
         UIImage *image = info[UIImagePickerControllerOriginalImage];
         self.displayImageWindow.image = image;
+        self.originalGrayscaleLoaded = [image copy];
         
         self.buttonRestoreOriginal.enabled = YES;
         self.buttonThresholdStep.enabled = YES;
-        self.buttonRectBandsStep.enabled = YES;
-        self.buttonFinalBoundariesStep.enabled = YES;
+        
     }
 }
 

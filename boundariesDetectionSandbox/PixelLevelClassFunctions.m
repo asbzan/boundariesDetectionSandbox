@@ -9,6 +9,8 @@
 #import "PixelLevelClassFunctions.h"
 #import "HelperMathClassFunctions.h"
 
+#define BACKGROUNDPIXELBOUNDARY 50
+
 #define BYTESPERPIXEL 4
 #define BITSPERCOMPONENT 8
 #define RGBA_BIGEND_REDCHANNEL 0
@@ -833,24 +835,24 @@
     // ALTERNATIVELY could have collapsed all these memory accesses in same double for loop,
     // BUT, from loop unrolling/HPC that might be worse/slower since they are potentially vast different areas of memory and NOT sequential... definitely NOT as easily parallelizable at least
     NSUInteger bytesPerRow = CGImageGetBytesPerRow(inputCGimageRef);
-    for (NSUInteger j = 0; j < 50; j++) {
-        for (NSUInteger i = 0; i < 50; i++) {
+    for (NSUInteger j = 0; j < BACKGROUNDPIXELBOUNDARY; j++) {
+        for (NSUInteger i = 0; i < BACKGROUNDPIXELBOUNDARY; i++) {
             NSUInteger byteIndxRegion = (bytesPerRow * j) + (BYTESPERPIXEL * i);
             UInt32 intensity = pixelInputData[byteIndxRegion+indexByteChannelOffset];
             [backgroundPixels addObject:[NSNumber numberWithUnsignedInt:intensity]];
         }
     }
     // ASSUMING WIDTH = columns = i = Longest ~3200 = x coord, HEIGHT = Row/bytesPerRow = j = Shortest ~2400 = y coord
-    NSUInteger startCorner2height = inputHeight - 50;
-    NSUInteger startCorner3width = inputWidth - 50;
+    NSUInteger startCorner2height = inputHeight - BACKGROUNDPIXELBOUNDARY;
+    NSUInteger startCorner3width = inputWidth - BACKGROUNDPIXELBOUNDARY;
     for (NSUInteger j = (startCorner2height - 1); j < inputHeight; j++) {
-        for (NSUInteger i = 0; i < 50; i++) {
+        for (NSUInteger i = 0; i < BACKGROUNDPIXELBOUNDARY; i++) {
             NSUInteger byteIndxRegion = (bytesPerRow * j) + (BYTESPERPIXEL * i);
             UInt32 intensity = pixelInputData[byteIndxRegion+indexByteChannelOffset];
             [backgroundPixels addObject:[NSNumber numberWithUnsignedInt:intensity]];
         }
     }
-    for (NSUInteger j = 0; j < 50; j++) {
+    for (NSUInteger j = 0; j < BACKGROUNDPIXELBOUNDARY; j++) {
         for (NSUInteger i = (startCorner3width - 1); i < inputWidth; i++) {
             NSUInteger byteIndxRegion = (bytesPerRow * j) + (BYTESPERPIXEL * i);
             UInt32 intensity = pixelInputData[byteIndxRegion+indexByteChannelOffset];
@@ -887,5 +889,53 @@
 }
 
 
+
++(UIImage *) convertToImageFromArray:(NSArray *)dataArray AndOriginalImageWidth: (NSUInteger)width AndImageHeight:(NSUInteger)height {
+    
+    UIImage *output;
+    if (width * height != dataArray.count) {
+        NSLog(@"ERROR!!! that data array does not seem to have the same area size as the given width and height! Null returned");
+        return NULL;
+    }
+    
+    
+    NSUInteger bitmapBytesPerRowInputImg = width * BYTESPERPIXEL;
+    NSUInteger bitmapTotalByteSizeInputImg = bitmapBytesPerRowInputImg * height;
+    CGColorSpaceRef colorspaceStandardizedOutput = CGColorSpaceCreateDeviceRGB();
+ 
+    unsigned char *pixelData = malloc(bitmapTotalByteSizeInputImg);
+    //failure catch
+    
+    CGContextRef outputImageContext = CGBitmapContextCreate(pixelData, width, height, BITSPERCOMPONENT, bitmapBytesPerRowInputImg, colorspaceStandardizedOutput, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+    // failure catch
+
+    CGContextRelease(outputImageContext);
+    unsigned long byteIndex = 0;
+    for (NSUInteger ij = 0; ij < (width * height); ij++) {
+        NSNumber *pixelMonoChannel = dataArray[ij];
+        unsigned char pixelValue = (unsigned char)pixelMonoChannel.unsignedIntValue;
+        
+        pixelData[byteIndex + 0] = pixelValue; // red
+        pixelData[byteIndex + 1] = pixelValue; // green
+        pixelData[byteIndex + 2] = pixelValue; // blue
+        pixelData[byteIndex + 3] = 255;  // alpha
+        
+        byteIndex += BYTESPERPIXEL;
+
+    }
+
+    CGContextRef finalImageContext = CGBitmapContextCreate(pixelData, width, height, BITSPERCOMPONENT, bitmapBytesPerRowInputImg, colorspaceStandardizedOutput, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+    
+    CGImageRef outputSingleChannelImage = CGBitmapContextCreateImage(finalImageContext);
+    
+    output = [[UIImage alloc] initWithCGImage:outputSingleChannelImage];
+    
+    CGContextRelease(finalImageContext);
+    CGColorSpaceRelease(colorspaceStandardizedOutput);
+    CGImageRelease(outputSingleChannelImage); // CHECK if reduces memory footprint with release, as saving bug not affected by change
+    free(pixelData);
+    
+    return output;
+}
 
 @end
