@@ -1,0 +1,29 @@
+## generated Build
+build/
+DerivedData
+
+## Settings Various
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+
+## other Else
+*.xccheckout
+*.moved-aside
+*.xcuserstate
+
+*.hmap
+*.ipa
+
+.DS_Store
+
+.idea/
+*.moved-aside
+profile
+
