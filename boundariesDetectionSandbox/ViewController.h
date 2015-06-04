@@ -8,13 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonLoadGrayImage;
 @property (weak, nonatomic) IBOutlet UIButton *buttonRestoreOriginal;
 @property (weak, nonatomic) IBOutlet UIButton *buttonThresholdStep;
 @property (weak, nonatomic) IBOutlet UIButton *buttonRectBandsStep;
 @property (weak, nonatomic) IBOutlet UIButton *buttonFinalBoundariesStep;
+
+@property (weak, nonatomic) IBOutlet UILabel *LabelBaselineThresholdValue;
 
 @property (weak, nonatomic) IBOutlet UIImageView *displayImageWindow;
 
