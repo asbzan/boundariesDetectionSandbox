@@ -30,11 +30,14 @@ typedef NS_ENUM(NSInteger, ImageChannel) {
 +(NSArray *) boundariesForImageAnalysisFromRectangleDetection: (UIImage *)sourceCompositeImage;
 +(NSArray *) boundariesForImageAnalysisForChannel: (ImageChannel)channel FromRectangleDetectionOf: (UIImage *)sourceCompositeImage;
 
-+(UIImage *) convertToImageFromArray:(NSArray *)dataArray AndOriginalImageWidth: (NSUInteger)width AndImageHeight:(NSUInteger)height;
+
 
 +(double) calculateThresholdPixelValueForChannel: (ImageChannel)channel FromImage:(UIImage *)sourceCompositeImage;
 +(NSArray *) singleChannel:(ImageChannel)channel FilteredPixelsArrayOf:(UIImage *)image BelowThreshold:(double)threshold;
 
++(UIImage *) convertToImageFromArray:(NSArray *)dataArray AndOriginalImageWidth: (NSUInteger)width AndImageHeight:(NSUInteger)height;
++(UIImage *) snippedImagePortionFromX1:(NSUInteger)x1 Y1:(NSUInteger)y1 X2:(NSUInteger)x2 Y2:(NSUInteger)y2 OfImage:(UIImage *)source;
 
++(NSArray *) getBackgroundSampleRegionsCoordinatesFromImage:(UIImage *)source;
 
 @end

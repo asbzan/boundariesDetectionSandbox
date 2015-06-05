@@ -11,6 +11,9 @@
 
 #define BACKGROUNDPIXELBOUNDARY 50
 
+#define BELOWTHRESHOLDDARK 0
+#define ABOVEEQUALTHRESHOLDLIGHT 200
+
 #define BYTESPERPIXEL 4
 #define BITSPERCOMPONENT 8
 #define RGBA_BIGEND_REDCHANNEL 0
@@ -735,7 +738,7 @@
     for (NSUInteger ij = 0; ij < (inputWidth * inputHeight); ij++) {
         unsigned char channelValue = pixelInputData[byteIndex + indexByteChannelOffset];
         int input = (int)channelValue;
-        NSUInteger filteredPixelIntensity = (((NSUInteger)threshold > input) ? 0 : input);
+        NSUInteger filteredPixelIntensity = (((NSUInteger)threshold > input) ? BELOWTHRESHOLDDARK : ABOVEEQUALTHRESHOLDLIGHT);
         [filteredPixelValues addObject:[NSNumber numberWithUnsignedInteger:filteredPixelIntensity]];
         
         byteIndex += BYTESPERPIXEL;
@@ -761,6 +764,7 @@
     NSUInteger inputWidth = CGImageGetWidth(inputCGimageRef);
     NSUInteger inputHeight = CGImageGetHeight(inputCGimageRef);
     NSUInteger bitmapBytesPerRowInputImg = inputWidth * BYTESPERPIXEL;
+    NSLog(@"CGImage W=%lu,H=%lu", (unsigned long)inputWidth, (unsigned long)inputHeight);
     NSUInteger bitmapTotalByteSizeInputImg = bitmapBytesPerRowInputImg * inputHeight;
     CGColorSpaceRef colorspaceStandardizedOutput = CGColorSpaceCreateDeviceRGB();
     if (colorspaceStandardizedOutput == NULL) {
@@ -835,6 +839,10 @@
     // ALTERNATIVELY could have collapsed all these memory accesses in same double for loop,
     // BUT, from loop unrolling/HPC that might be worse/slower since they are potentially vast different areas of memory and NOT sequential... definitely NOT as easily parallelizable at least
     NSUInteger bytesPerRow = CGImageGetBytesPerRow(inputCGimageRef);
+    
+    NSLog(@"Calculated bytesPerRow=%lu", (unsigned long)bitmapBytesPerRowInputImg);
+    NSLog(@"function CGImageGetBytesPerRow=%lu", (unsigned long)bytesPerRow);
+    
     for (NSUInteger j = 0; j < BACKGROUNDPIXELBOUNDARY; j++) {
         for (NSUInteger i = 0; i < BACKGROUNDPIXELBOUNDARY; i++) {
             NSUInteger byteIndxRegion = (bytesPerRow * j) + (BYTESPERPIXEL * i);
@@ -936,6 +944,136 @@
     free(pixelData);
     
     return output;
+}
+
+
++(UIImage *) snippedImagePortionFromX1:(NSUInteger)x1 Y1:(NSUInteger)y1 X2:(NSUInteger)x2 Y2:(NSUInteger)y2 OfImage:(UIImage *)source {
+
+    if (x2-x1 != BACKGROUNDPIXELBOUNDARY || y2-y1 != BACKGROUNDPIXELBOUNDARY) {
+        NSLog(@"ERROR!!! Coordinate Region Input does not EQUAL Square %d Pixel Background Region Sampled!", BACKGROUNDPIXELBOUNDARY);
+        return NULL;
+    }
+    
+    CGImageRef inputCGimageRef = [source CGImage];
+    NSUInteger inputWidth = CGImageGetWidth(inputCGimageRef);
+    NSUInteger inputHeight = CGImageGetHeight(inputCGimageRef);
+    NSLog(@"CGImage W=%lu,H=%lu", (unsigned long)inputWidth, (unsigned long)inputHeight);
+    NSUInteger bitmapBytesPerRowInputImg = inputWidth * BYTESPERPIXEL;
+    NSUInteger bitmapTotalByteSizeInputImg = bitmapBytesPerRowInputImg * inputHeight;
+    CGColorSpaceRef colorspaceStandardizedOutput = CGColorSpaceCreateDeviceRGB();
+    if (colorspaceStandardizedOutput == NULL) {
+        NSLog(@"ERROR! conversion Color Space NOT allocated.");
+        return NULL;
+    }
+    
+    CGContextRef inputImageContext;
+    unsigned char *pixelInputData = malloc(bitmapTotalByteSizeInputImg);
+    if (pixelInputData == NULL) {
+        NSLog(@"Error!! Single Channel Input Image Pixel Data pointer allocation failed!!");
+        CGColorSpaceRelease(colorspaceStandardizedOutput);
+        return NULL;
+    }
+    
+    inputImageContext = CGBitmapContextCreate(pixelInputData, inputWidth, inputHeight, BITSPERCOMPONENT, bitmapBytesPerRowInputImg, colorspaceStandardizedOutput, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+    if (inputImageContext == NULL) {
+        NSLog(@"Error!!! no context ref returned!");
+        CGColorSpaceRelease(colorspaceStandardizedOutput);
+        free(pixelInputData);
+        return NULL;
+    }
+    
+    CGContextDrawImage(inputImageContext, CGRectMake(0, 0, inputWidth, inputHeight), inputCGimageRef);
+    
+    
+    CGContextRef outputImageContext;
+    unsigned char *pixelOutputData = malloc(bitmapTotalByteSizeInputImg);
+    if (pixelOutputData == NULL) {
+        NSLog(@"ERROR!! conversion memory space NOT ALLOCATED!");
+        CGColorSpaceRelease(colorspaceStandardizedOutput);
+        free(pixelInputData);
+        CGContextRelease(inputImageContext);
+        return NULL;
+    }
+    // Network/Neutral Ordering is for Big-Endian (most human understandable)
+    outputImageContext = CGBitmapContextCreate(pixelOutputData, BACKGROUNDPIXELBOUNDARY, BACKGROUNDPIXELBOUNDARY, BITSPERCOMPONENT, bitmapBytesPerRowInputImg, colorspaceStandardizedOutput, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+    if (outputImageContext == NULL) {
+        NSLog(@"ERROR!! createCustomFirstComposite Output Image context NOT created (error msg for function in Log too)!!!");
+        CGColorSpaceRelease(colorspaceStandardizedOutput);
+        free(pixelInputData);
+        CGContextRelease(inputImageContext);
+        free(pixelOutputData);
+        return NULL;
+    }
+    //CGContextDrawImage(outputImageContext, CGRectMake(0, 0, input2width, input1height), image2.CGImage); in pixel processor but didn't fix saving bug
+ 
+    BOOL isBigEnd;
+    CGBitmapInfo bitmapSettingsLittle = kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Little;
+    CGBitmapInfo bitmapSettingsBig = kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big;
+    if (CGBitmapContextGetBitmapInfo(inputImageContext) ==  bitmapSettingsBig) {
+        NSLog(@"BigEndian--double check to ensure always matches imageContext Creation byte order...");
+        isBigEnd = YES;
+    }
+    else if (CGBitmapContextGetBitmapInfo(inputImageContext) ==  bitmapSettingsLittle) {
+        NSLog(@"LittleEndian--double check to ensure always matches imageContext Creation byte order...");
+        isBigEnd = NO;
+        
+    }
+    else {
+        NSLog(@"ERROR! Since Byte Order NOT known, image contexts can't guarantee correct channel access!");
+        CGContextRelease(inputImageContext);
+        CGContextRelease(outputImageContext);
+        free(pixelInputData);
+        free(pixelOutputData);
+        CGColorSpaceRelease(colorspaceStandardizedOutput);
+        return NULL;
+    }
+
+    const NSUInteger RED_CHANNEL = (isBigEnd ? RGBA_BIGEND_REDCHANNEL : RGBA_LITTLEEND_REDCHANNEL);
+    const NSUInteger GREEN_CHANNEL = (isBigEnd ? RGBA_BIGEND_GREENCHANNEL : RGBA_LITTLEEND_GREENCHANNEL);
+    const NSUInteger BLUE_CHANNEL = (isBigEnd ? RGBA_BIGEND_BLUECHANNEL : RGBA_LITTLEEND_BLUECHANNEL);
+    const NSUInteger ALPHA_CHANNEL = (isBigEnd ? RGBA_BIGEND_ALPHACHANNEL : RGBA_LITTLEEND_ALPHACHANNEL);
+    
+    unsigned long byteOutIndex = 0;
+    // ASSUMING HEIGHT = Row/bytesPerRow = i = Shortest ~2400 = y coord, WIDTH = columns = j = Longest ~3200 = x coord
+    for (NSUInteger i = x1; i < x2; i++) {
+        for (NSUInteger j = y1; j < y2; j++) {
+            NSUInteger byteIndxRegion = (bitmapBytesPerRowInputImg * i) + (BYTESPERPIXEL * j);
+            unsigned char intensity = pixelInputData[byteIndxRegion+GREEN_CHANNEL];
+            
+            pixelOutputData[byteOutIndex + RED_CHANNEL] = intensity;
+            pixelOutputData[byteOutIndex + GREEN_CHANNEL] = intensity;
+            pixelOutputData[byteOutIndex + BLUE_CHANNEL] = intensity;
+            pixelOutputData[byteOutIndex + ALPHA_CHANNEL] = 255;
+            
+            byteOutIndex += BYTESPERPIXEL;
+        }
+    }
+
+    CGContextRelease(inputImageContext);
+    
+    CGContextRef anotherContext = CGBitmapContextCreate(pixelOutputData, inputWidth, inputHeight, BITSPERCOMPONENT, bitmapBytesPerRowInputImg, colorspaceStandardizedOutput, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+    
+    free(pixelInputData);
+    
+    CGImageRef outputSingleChannelImage = CGBitmapContextCreateImage(anotherContext);
+    
+    UIImage *output;
+    output = [[UIImage alloc] initWithCGImage:outputSingleChannelImage];
+    
+    CGContextRelease(outputImageContext);
+    CGContextRelease(anotherContext);
+    CGColorSpaceRelease(colorspaceStandardizedOutput);
+    CGImageRelease(outputSingleChannelImage); // CHECK if reduces memory footprint with release, as saving bug not affected by change
+    free(pixelOutputData);
+    
+    return output;
+}
+
+
++(NSArray *) getBackgroundSampleRegionsCoordinatesFromImage:(UIImage *)source {
+    NSArray *nestedArraysFor4BackgroundRegionCoordinates;
+    
+    return nestedArraysFor4BackgroundRegionCoordinates;
 }
 
 @end
