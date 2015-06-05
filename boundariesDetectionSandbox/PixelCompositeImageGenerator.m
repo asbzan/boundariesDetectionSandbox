@@ -232,7 +232,8 @@
     }
     //CGContextDrawImage(outputImageContext, CGRectMake(0, 0, input2width, input1height), image2.CGImage); in pixel processor but didn't fix saving bug
     // pixel processor has cgcontext and colorspace released
-    
+
+// IS THIS BYTE ORDER CHECK ON OUTPUT even necessary!!?! Isn't it set to *BE* BIG-end always!??! Test Input(s) instead!?!
     BOOL isBigEnd;
     CGBitmapInfo bitmapSettingsLittle = kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Little;
     CGBitmapInfo bitmapSettingsBig = kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big;
@@ -451,7 +452,7 @@
     // this possibly fixes things (no)
     //CGContextDrawImage(outputImageContext, CGRectMake(0, 0, compositeCGWidth, compositeCGHeight), compositeImageRef);
     
-    
+// IS THIS BYTE ORDER CHECK ON OUTPUT even necessary!!?! Isn't it set to *BE* BIG-end always!??! Test Grayscale Input instead!?!
     BOOL isBigEnd;
     CGBitmapInfo bitmapSettingsLittle = kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Little;
     CGBitmapInfo bitmapSettingsBig = kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big;

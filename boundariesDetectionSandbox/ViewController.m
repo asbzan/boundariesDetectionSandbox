@@ -16,6 +16,7 @@
 
 @property UIImage *originalGrayscaleLoaded;
 @property NSArray *imageThresholdChannelData;
+@property UIImage *thresholdedGrayscaleImage;
 
 @end
 
@@ -64,19 +65,26 @@
     NSArray *thresholdImageChannelData = [PixelLevelClassFunctions singleChannel:Green FilteredPixelsArrayOf:self.displayImageWindow.image BelowThreshold:thresholdCalculated];
     self.imageThresholdChannelData = thresholdImageChannelData;
     
-    // would ever the CGWidth be different from the UIWidth?
+    // would ever the CGWidth be different from the UIWidth for the composited images?
     NSUInteger imageWidth = self.displayImageWindow.image.size.width;
     NSUInteger imageHeight = self.displayImageWindow.image.size.height;
+    NSLog(@"UIImage W=%lu,H=%lu",(unsigned long)imageWidth, (unsigned long)imageHeight);
     
     UIImage *thresholdImage = [PixelLevelClassFunctions convertToImageFromArray:thresholdImageChannelData AndOriginalImageWidth:imageWidth AndImageHeight:imageHeight];
     self.displayImageWindow.image = thresholdImage;
+    self.thresholdedGrayscaleImage = thresholdImage;
     self.buttonRectBandsStep.enabled = YES;
-    
+    //enable corners thumbnail inspection
 }
 
 
 - (IBAction)rectBandsResultsStep:(id)sender {
  
+    self.displayImageWindow.image = self.thresholdedGrayscaleImage;
+    //disable corners thumbnail inspection
+    
+    // operations here
+    
     self.buttonFinalBoundariesStep.enabled = YES;
 }
 
