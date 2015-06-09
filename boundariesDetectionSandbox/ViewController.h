@@ -15,6 +15,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *buttonThresholdStep;
 @property (weak, nonatomic) IBOutlet UIButton *buttonRectBandsStep;
 @property (weak, nonatomic) IBOutlet UIButton *buttonFinalBoundariesStep;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *buttonSelectorCornerBackgroundSamples;
+@property (weak, nonatomic) IBOutlet UIButton *buttonDisplayFullThresholdedImage;
 
 @property (weak, nonatomic) IBOutlet UILabel *LabelBaselineThresholdValue;
 

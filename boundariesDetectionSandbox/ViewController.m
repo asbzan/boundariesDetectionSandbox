@@ -29,11 +29,14 @@
     self.buttonThresholdStep.enabled = NO;
     self.buttonRectBandsStep.enabled = NO;
     self.buttonFinalBoundariesStep.enabled = NO;
+    self.buttonSelectorCornerBackgroundSamples.enabled = NO;
+    self.buttonDisplayFullThresholdedImage.enabled = NO;
     
     self.photosImagePickerController = [[UIImagePickerController alloc] init];
     self.photosImagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     self.photosImagePickerController.allowsEditing = NO;
     self.photosImagePickerController.delegate = self;
+    self.LabelBaselineThresholdValue.text = @"00";
 }
 
 
@@ -54,6 +57,9 @@
     self.displayImageWindow.image = self.originalGrayscaleLoaded;
     self.buttonRectBandsStep.enabled = NO;
     self.buttonFinalBoundariesStep.enabled = NO;
+    self.LabelBaselineThresholdValue.text = @"0";
+    self.buttonDisplayFullThresholdedImage.enabled = NO;
+    self.buttonSelectorCornerBackgroundSamples.enabled = NO;
     
 }
 
@@ -65,23 +71,47 @@
     NSArray *thresholdImageChannelData = [PixelLevelClassFunctions singleChannel:Green FilteredPixelsArrayOf:self.displayImageWindow.image BelowThreshold:thresholdCalculated];
     self.imageThresholdChannelData = thresholdImageChannelData;
     
-    // would ever the CGWidth be different from the UIWidth for the composited images?
-    NSUInteger imageWidth = self.displayImageWindow.image.size.width;
-    NSUInteger imageHeight = self.displayImageWindow.image.size.height;
-    NSLog(@"UIImage W=%lu,H=%lu",(unsigned long)imageWidth, (unsigned long)imageHeight);
+    // YES: would ever the CGWidth be different from the UIWidth for the composited images
+    NSUInteger imageWidthUI = self.displayImageWindow.image.size.width;
+    NSUInteger imageHeightUI = self.displayImageWindow.image.size.height;
+    CGImageRef inputCGimageRef = [self.displayImageWindow.image CGImage];
+    NSUInteger imageWidth = CGImageGetWidth(inputCGimageRef);
+    NSUInteger imageHeight = CGImageGetHeight(inputCGimageRef);
+    NSLog(@"UIImage W=%lu,H=%lu",(unsigned long)imageWidthUI, (unsigned long)imageHeightUI);
+    NSLog(@"CGImage W=%lu,H=%lu",(unsigned long)imageWidth, (unsigned long)imageHeight);
     
     UIImage *thresholdImage = [PixelLevelClassFunctions convertToImageFromArray:thresholdImageChannelData AndOriginalImageWidth:imageWidth AndImageHeight:imageHeight];
     self.displayImageWindow.image = thresholdImage;
     self.thresholdedGrayscaleImage = thresholdImage;
+    
+    self.buttonSelectorCornerBackgroundSamples.enabled = YES;
+    self.buttonDisplayFullThresholdedImage.enabled = YES;
+    
     self.buttonRectBandsStep.enabled = YES;
-    //enable corners thumbnail inspection
+    
 }
+
+
+- (IBAction)displaySelectedBGSampleThresholdedCorner:(id)sender {
+    
+    //self.buttonRectBandsStep.enabled = NO;
+    
+}
+
+
+- (IBAction)displayRestoredFullThresholdedImage:(id)sender {
+    
+    self.buttonSelectorCornerBackgroundSamples.enabled = YES;
+    self.buttonRectBandsStep.enabled = YES;
+    self.displayImageWindow.image = self.thresholdedGrayscaleImage;
+}
+
 
 
 - (IBAction)rectBandsResultsStep:(id)sender {
  
     self.displayImageWindow.image = self.thresholdedGrayscaleImage;
-    //disable corners thumbnail inspection
+    self.buttonSelectorCornerBackgroundSamples.enabled = NO;
     
     // operations here
     
@@ -110,7 +140,7 @@
         
         self.buttonRestoreOriginal.enabled = YES;
         self.buttonThresholdStep.enabled = YES;
-        
+        self.LabelBaselineThresholdValue.text = @"0";
     }
 }
 
