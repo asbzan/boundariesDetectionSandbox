@@ -1071,8 +1071,25 @@
 
 
 +(NSArray *) getBackgroundSampleRegionsCoordinatesFromImage:(UIImage *)source {
-    NSArray *nestedArraysFor4BackgroundRegionCoordinates;
     
+    NSArray *nestedArraysFor4BackgroundRegionCoordinates;
+    CGImageRef inputCGimageRef = [source CGImage];
+    NSUInteger inputWidth = CGImageGetWidth(inputCGimageRef);
+    NSUInteger inputHeight = CGImageGetHeight(inputCGimageRef);
+    
+    // ASSUMING WIDTH = rows = i = Longest ~3200 = x coord, HEIGHT = columns = Row/bytesPerRow = j = Shortest ~2400 = y coord
+    NSUInteger startCorner2height = inputHeight - BACKGROUNDPIXELBOUNDARY;
+    NSUInteger startCorner3width = inputWidth - BACKGROUNDPIXELBOUNDARY;
+    NSNumber *corner2h = [NSNumber numberWithUnsignedInteger:(startCorner2height - 1)];
+    NSNumber *corner3w = [NSNumber numberWithUnsignedInteger:(startCorner3width - 1)];
+    NSNumber *heightBoundary = [NSNumber numberWithUnsignedInteger:(inputHeight - 1)];
+    NSNumber *widthBoundary = [NSNumber numberWithUnsignedInteger:(inputWidth - 1)];
+    NSArray *corner1 = @[[NSNumber numberWithUnsignedInteger:0], [NSNumber numberWithUnsignedInteger:0], [NSNumber numberWithUnsignedInteger:BACKGROUNDPIXELBOUNDARY], [NSNumber numberWithUnsignedInteger:BACKGROUNDPIXELBOUNDARY]];
+    NSArray *corner2 = [NSArray arrayWithObjects: [NSNumber numberWithUnsignedInteger:0], corner2h, [NSNumber numberWithUnsignedInteger:BACKGROUNDPIXELBOUNDARY], heightBoundary, nil];
+    NSArray *corner3 = @[corner3w, @0, widthBoundary, @BACKGROUNDPIXELBOUNDARY ];
+    NSArray *corner4 = @[corner3w, corner2h, widthBoundary, heightBoundary];
+    
+    nestedArraysFor4BackgroundRegionCoordinates = [NSArray arrayWithObjects:corner1, corner2, corner3, corner4, nil];
     return nestedArraysFor4BackgroundRegionCoordinates;
 }
 
