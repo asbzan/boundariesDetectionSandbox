@@ -985,8 +985,11 @@
     CGContextDrawImage(inputImageContext, CGRectMake(0, 0, inputWidth, inputHeight), inputCGimageRef);
     
     
+    NSUInteger bitmapBytesPerRowOutputImg = BACKGROUNDPIXELBOUNDARY * BYTESPERPIXEL;
+    NSUInteger bitmapTotalByteSizeOutputImg = bitmapBytesPerRowOutputImg * BACKGROUNDPIXELBOUNDARY;
+    
     CGContextRef outputImageContext;
-    unsigned char *pixelOutputData = malloc(bitmapTotalByteSizeInputImg);
+    unsigned char *pixelOutputData = malloc(bitmapTotalByteSizeOutputImg);
     if (pixelOutputData == NULL) {
         NSLog(@"ERROR!! conversion memory space NOT ALLOCATED!");
         CGColorSpaceRelease(colorspaceStandardizedOutput);
@@ -995,7 +998,7 @@
         return NULL;
     }
     // Network/Neutral Ordering is for Big-Endian (most human understandable)
-    outputImageContext = CGBitmapContextCreate(pixelOutputData, BACKGROUNDPIXELBOUNDARY, BACKGROUNDPIXELBOUNDARY, BITSPERCOMPONENT, bitmapBytesPerRowInputImg, colorspaceStandardizedOutput, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+    outputImageContext = CGBitmapContextCreate(pixelOutputData, BACKGROUNDPIXELBOUNDARY, BACKGROUNDPIXELBOUNDARY, BITSPERCOMPONENT, bitmapBytesPerRowOutputImg, colorspaceStandardizedOutput, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
     if (outputImageContext == NULL) {
         NSLog(@"ERROR!! createCustomFirstComposite Output Image context NOT created (error msg for function in Log too)!!!");
         CGColorSpaceRelease(colorspaceStandardizedOutput);
@@ -1051,7 +1054,7 @@
 
     CGContextRelease(inputImageContext);
     
-    CGContextRef anotherContext = CGBitmapContextCreate(pixelOutputData, inputWidth, inputHeight, BITSPERCOMPONENT, bitmapBytesPerRowInputImg, colorspaceStandardizedOutput, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+    CGContextRef anotherContext = CGBitmapContextCreate(pixelOutputData, BACKGROUNDPIXELBOUNDARY, BACKGROUNDPIXELBOUNDARY, BITSPERCOMPONENT, bitmapBytesPerRowOutputImg, colorspaceStandardizedOutput, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
     
     free(pixelInputData);
     

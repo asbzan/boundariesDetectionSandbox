@@ -95,6 +95,20 @@
 - (IBAction)displaySelectedBGSampleThresholdedCorner:(id)sender {
     
     //self.buttonRectBandsStep.enabled = NO;
+    NSArray *fourRegionCornersDiagonalCoordinates = [PixelLevelClassFunctions getBackgroundSampleRegionsCoordinatesFromImage:self.displayImageWindow.image];
+    
+    NSUInteger cornerSelected = self.buttonSelectorCornerBackgroundSamples.selectedSegmentIndex;
+    NSArray *corner2Coordinates = fourRegionCornersDiagonalCoordinates[cornerSelected];
+    NSNumber *x1 = corner2Coordinates[0];
+    NSNumber *y1 = corner2Coordinates[1];
+    NSNumber *x2 = corner2Coordinates[2];
+    NSNumber *y2 = corner2Coordinates[3];
+    
+    UIImage *regionCornerBackground = [PixelLevelClassFunctions snippedImagePortionFromX1:x1.unsignedIntegerValue Y1:y1.unsignedIntegerValue X2:x2.unsignedIntegerValue Y2:y2.unsignedIntegerValue OfImage:self.displayImageWindow.image];
+    NSUInteger regionHeight = regionCornerBackground.size.height;
+    NSUInteger regionWidth = regionCornerBackground.size.width;
+    NSLog(@"RegionCorner Thumbnail Used for background threshold value: UI-H=%d, UI-W=%d", regionHeight, regionWidth);
+    self.displayImageWindow.image = regionCornerBackground;
     
 }
 
